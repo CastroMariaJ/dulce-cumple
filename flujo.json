@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "nodes": [
     {
@@ -318,4 +319,326 @@
     "templateCredsSetupCompleted": true,
     "instanceId": "a2121ae99b9d219fb881f8da65e666b8d216614d9197ccaef2ffbd505666e81b"
   }
+=======
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dulce-cumple/nuevo-cliente",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "4e81db07-311a-4e30-8d77-59b16da5baa9",
+      "name": "Webhook - Nuevo cliente",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        64,
+        -96
+      ],
+      "webhookId": "dulce-cumple-nuevo-cliente"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "nombre",
+              "name": "nombre",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "correo",
+              "name": "correo",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "cumpleanos",
+              "name": "cumpleanos",
+              "value": "={{ $json.body.birthday }}",
+              "type": "string"
+            },
+            {
+              "id": "fecha_registro",
+              "name": "fecha_registro",
+              "value": "={{ $now.setZone('America/Bogota').toFormat('yyyy-LL-dd HH:mm') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "571f302e-bb5d-4745-a5cf-b9358b88ace9",
+      "name": "Preparar datos del cliente",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        288,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO clientes (nombre, correo, cumpleanos) VALUES ('{{ $json.nombre }}', '{{ $json.correo }}', '{{ $json.cumpleanos }}') RETURNING nombre, correo, cumpleanos, fecha_registro;",
+        "options": {}
+      },
+      "id": "6d489ee5-7457-4fe7-925c-854b0c42b093",
+      "name": "PostgreSQL - Guardar cliente",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        528,
+        -96
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "2VY2fsbK8aPGlklh",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1IwCZwPXzL-5p5zoxyj-fYT0dQRg9fQL1AoknPRDicAE",
+          "mode": "list",
+          "cachedResultName": "dulce cumple acti.",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IwCZwPXzL-5p5zoxyj-fYT0dQRg9fQL1AoknPRDicAE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IwCZwPXzL-5p5zoxyj-fYT0dQRg9fQL1AoknPRDicAE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "nombre": "={{ $json.nombre }}",
+            "correo": "={{ $json.correo }}",
+            "cumpleaños": "={{ $json.cumpleanos }}",
+            "fecha_registro": "={{ $json.fecha_registro }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nombre",
+              "displayName": "nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "correo",
+              "displayName": "correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cumpleaños",
+              "displayName": "cumpleaños",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "19ecdfcf-ec59-49f1-ba22-d480ae87c2ea",
+      "name": "Google Sheets - Agregar cliente",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        768,
+        -96
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PhRd6Qk1iTpJm9XY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\": true, \"mensaje\": \"Cliente guardado correctamente\"}",
+        "options": {}
+      },
+      "id": "62f7d6e0-55f5-494c-9bea-961b64d07108",
+      "name": "Responder registro exitoso",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        992,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "7a9cc546-2e34-40ba-85f0-b3438045b97b",
+      "name": "Todos los días a las 9 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT nombre, correo, cumpleanos FROM clientes WHERE TO_CHAR(cumpleanos, 'MM-DD') = TO_CHAR(CURRENT_DATE, 'MM-DD');",
+        "options": {}
+      },
+      "id": "904e3609-1b43-4831-84b8-c807a48d8480",
+      "name": "PostgreSQL - Buscar cumpleaños de hoy",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        352,
+        208
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "2VY2fsbK8aPGlklh",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.correo }}",
+        "subject": "=¡Feliz cumpleaños, {{ $json.nombre }}! ",
+        "message": "=<h2>¡Feliz cumpleaños, {{ $json.nombre }}! </h2><p>Esperamos que tengas un día lleno de alegría y momentos especiales.</p><p>Con cariño,<br><strong>Dulce Cumple</strong></p>",
+        "options": {}
+      },
+      "id": "6daf183a-dc81-468d-be50-8a8caf5f8151",
+      "name": "Gmail - Enviar felicitación",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        208
+      ],
+      "webhookId": "0cb81737-ac2d-498a-8fda-265a92e6ed8d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "wOFUaUYaHGg8jYHM",
+          "name": "Gmail account 2"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Webhook - Nuevo cliente": {
+      "main": [
+        [
+          {
+            "node": "Preparar datos del cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar datos del cliente": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Guardar cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Guardar cliente": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Agregar cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Agregar cliente": {
+      "main": [
+        [
+          {
+            "node": "Responder registro exitoso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Todos los días a las 9 AM": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Buscar cumpleaños de hoy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Buscar cumpleaños de hoy": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Enviar felicitación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a2121ae99b9d219fb881f8da65e666b8d216614d9197ccaef2ffbd505666e81b"
+  }
+>>>>>>> 0f9f317df040bec83a621c540f479f8fc2f48a4c
 }
